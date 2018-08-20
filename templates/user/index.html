@@ -1,0 +1,84 @@
+{% extends 'main/main.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load public_extras %}
+
+{% block cssunsettled %}
+    <link href="{% static 'public/css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div id="bodyin">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="well well-sm">
+                        <form>
+                            <fieldset>
+                                <legend class="text-center header">Crear Nueva Tarea Por Hacer.</legend>
+                                <br>
+                                <div class="row">
+                                    <div class="col">
+                                        <textarea class="form-control" id="cont_th" rows="3" placeholder="Ingresa tarea por hacer"></textarea>
+                                        <div id="error_th" class="errorus"></div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="btn btn-success sav_th">Guardar</div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="text-center">
+                        <h1>Tareas por hacer</h1>
+                    </div><br>
+                    {% if total == 0 %}
+                        <div class="alert alert-danger text-center" role="alert">
+                            No Tiene Tareas Pendientes.
+                        </div>
+                    {% else %}
+                        <div id="misthi" class="row">
+                            {% for pag in sear.paginator.query %}
+                                <div class="col-sm-4">
+                                    <div class="card {% if pag.status_th %}border-success{% else %}border-danger{% endif %} mb-3" style="max-width: 18rem;">
+                                        <div class="card-header">
+                                            {% if pag.status_th %}
+                                                Terminada el: {{ pag.dater_th|date:"d/m/Y" }}
+                                            {% else %}
+                                                Creada el: {{ pag.datec_th|date:"d/m/Y" }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="card-body {% if pag.status_th %}text-success{% else %}text-danger{% endif %}">
+                                            <p class="card-text">
+                                                {{ pag.name_th|cort:30 }}
+                                            </p>
+                                            <div class="text-center">
+                                                <div class="icon_in">
+                                                    <a><i class="far fa-edit" style="color: #737389;"></i></a>
+                                                    <a><i class="far fa-check-square" style="color: #737389;"></i></a>
+                                                    <a><i class="fas fa-trash-alt" style="color: #737389;"></i></a>
+                                                    <a><i class="far fa-eye"  style="color: #737389;"></i></a>
+                                                </div>
+                                                {% comment %}
+                                                <button class="btn btn-success" type="submit">Registrar</button>
+                                                <a class="btn btn-primary" href="{% url 'user:login' %}" role="button">Iniciar Sesión</a>
+                                                {% endcomment %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock %}

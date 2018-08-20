@@ -1,0 +1,137 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Todo List, organiza tus tareas pendientes">
+    <meta name="author" content="OPTIC">
+    {% comment %}
+        <link rel="icon" href="../../../../favicon.ico">
+    {% endcomment %}
+    <title>{% block title %} OPTIC - To Do List {% endblock %}</title>
+    {% block metanet %} {% endblock %}
+    {% block metafixed %} {% endblock %}
+    {% block cssfixed %}
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    {% endblock %}
+    {% block cssunsettled %} {% endblock %}
+    {% block metascriptfixed %}
+        <script type="text/javascript" src="{% static 'js/all.js' %}"></script>
+        <script type="text/javascript" src="{% static 'public/js/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'public/js/things.js' %}"></script>
+        <script type="text/javascript">
+            {% if request.user.is_anonymous %}
+                cache = sessionStorage;
+                cache.clear();
+            {% else %}
+                cache = sessionStorage;
+            {% endif %}
+            function getChat(chat){
+                return JSON.parse(cache.getItem(chat));
+            }
+            function setChat(chat, vl){
+                cache.setItem(chat, JSON.stringify(vl));
+            }
+			$.ajaxSetup({ 
+			    beforeSend: function(xhr, settings){
+			        function getCookie(name){
+			            var cookieValue = null;
+			            if(document.cookie && document.cookie != ''){
+			                var cookies = document.cookie.split(';');
+			                for(var i = 0; i < cookies.length; i++){
+			                     var cookie = jQuery.trim(cookies[i]);
+			                     // Does this cookie string begin with the name we want?
+			                     if (cookie.substring(0, name.length + 1) == (name + '=')){
+			                         cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+			                         break;
+			                     }
+			                 }
+			             }
+			             return cookieValue;
+			         }
+			         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))){
+			             // Only send the token to relative URLs i.e. locally.
+			             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+			         }
+			    } 
+			});
+			d2='{{ csrf_token }}';
+        </script>
+        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+	{% endblock %}
+</head>
+
+{% block bodybl %}
+    <body>
+{% endblock %}
+    
+
+    {% block scriptbase %}
+    {% endblock  %}
+    {% block startscript %}
+    {% endblock  %}
+    {% block header %}
+    {% block menu %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark navbar-dark">  
+            <a class="navbar-brand" href="#">OPTIC</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item active">
+                            <span class="nav-link">Bienvenido, {{ request.user.first_name }} {{ request.user.last_name }}</span>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'user:index' %}">Inicio<span class="sr-only">(current)</span></a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Nueva Tarea</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Mis Tareas
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="{% url 'user:pendingth' %}">Pendientes</a>
+                                <a class="dropdown-item" href="{% url 'user:madeth' %}">Realizadas</a>
+                                <a class="dropdown-item" href="{% url 'user:mythings' %}">Todas</a>
+                            </div>
+                        </li>
+                        
+                        {% if request.user.is_superuser and request.user.is_staff %}
+                            <li class="nav-item active">
+                                <a target="_blank" class="nav-link" href="{% url 'admin:index' %}">Administrador</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'user:logout' %}">Cerrar Sesión</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'user:login' %}">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url 'user:register' %}">Registrate</a>
+                        </li>
+                    {%endif%}
+                </ul>
+            </div>
+        </nav>
+    {% endblock %}
+    
+    {% endblock  %}
+    {% block content %}
+			
+    {% endblock %}
+    
+    {% block modal %}
+    {% endblock %}
+</body>
+</html>

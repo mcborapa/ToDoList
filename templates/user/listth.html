@@ -1,0 +1,59 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<div>Total: {{ total }}</div><br>
+<div class="well well-sm">
+    <ul class="list-group">
+        {% for pag in sear.paginator.query %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    {% if pag.status_th %}
+                        <span class="badge badge-success badge-pill">Completada</span>
+                    {% else %}
+                        <span class="badge badge-danger badge-pill">Pendiente</span>
+                    {% endif %}
+                    {{ pag.name_th }}
+                </div>
+                <div>
+                    {% if pag.status_th %}
+                        Terminada el: {{ pag.dater_th|date:"d/m/Y" }}
+                    {% else %}
+                        Creada el: {{ pag.datec_th|date:"d/m/Y" }}
+                    {% endif %}
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+{% if sear.paginator.num_pages > 1 %}
+    <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+            {% if sear.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for pgg in sear.paginator.paginator_simple %}
+                {% if sear.number == pgg %}
+                    <li class="page-item active">
+                        <a class="page-link">{{ pgg }} <span class="sr-only">(current)</span></a>
+                    </li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ pgg }}">{{ pgg }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if sear.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ sear.paginator.num_pages }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+
