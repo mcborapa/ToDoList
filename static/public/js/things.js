@@ -187,7 +187,6 @@ $(document).ready(function(){
 
     $('body').on('click', '.edit_thi', function(){
         var elem = $(this);
-        console.log(elem.data('typo'));
         elem.removeClass('btn-primary').addClass('btn-danger');
         elem.attr('disabled',true);
         elem.parents('#editthmo').find('.errorus').html('');

@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'todolist.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'TodoList',
-        'USER': 'postgres',
-        'PASSWORD': 'robert94',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': 'TodoList', #Nombre de base de datos
+        'USER': 'postgres', #Nombre del usuario de base de datos
+        'PASSWORD': 'robert94', #Tu Password
+        'HOST': 'localhost', #Host de la base de datos ej. 'localhost','127.0.0.1'
+        'PORT': '5432', #puerto de enlac de base de datos
     }
 }
 
