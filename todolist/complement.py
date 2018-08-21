@@ -1,6 +1,6 @@
+from datetime import datetime
 from django.core.paginator import Paginator
 from django.core.exceptions import ValidationError
-from datetime import datetime
 
 def dictfetchall(cursor):
 	columns = [col[0] for col in cursor.description]

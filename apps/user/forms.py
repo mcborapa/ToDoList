@@ -1,10 +1,7 @@
 from django import forms
+from apps.user.models import User
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.template import loader
-from apps.user.models import User
 
 UserModel = get_user_model()
 

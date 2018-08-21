@@ -6,17 +6,17 @@ from apps.user.views import (register, index, Login, mythings, pendingth, madeth
 
 urlpatterns = [
 	path('', index, name='index'),
-    path('register/', register, name='register'),
-    path('login/', Login.as_view(), name='login'),
-    path('logout/', login_required(logout_then_login), name='logout'),
-    path('mythings/', mythings, name='mythings'),
-    path('pending/', pendingth, name='pendingth'),
     path('made/', madeth, name='madeth'),
-    path('save_thing/', save_thing, name='save_thing'),
-    path('delete_thing/', delete_thing, name='delete_thing'),
-    path('chang_stat/', chang_stat, name='chang_stat'),
-    path('edit_thign/', edit_thign, name='edit_thign'),
     path('edit_th/', edit_th, name='edit_th'),
     path('view_th/', view_th, name='view_th'),
+    path('register/', register, name='register'),
+    path('mythings/', mythings, name='mythings'),
+    path('pending/', pendingth, name='pendingth'),
+    path('login/', Login.as_view(), name='login'),
+    path('chang_stat/', chang_stat, name='chang_stat'),
+    path('edit_thign/', edit_thign, name='edit_thign'),
+    path('save_thing/', save_thing, name='save_thing'),
+    path('delete_thing/', delete_thing, name='delete_thing'),
+    path('logout/', login_required(logout_then_login), name='logout'),
     
 ]

@@ -1,10 +1,7 @@
-from django.db import models, connection
-from django import forms
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 from todolist.complement import valid_fech, execute_sql
 import time
-
-# Create your models here.
 
 class User(AbstractUser):
 	email = models.EmailField('Correo Electrónico', unique=True)

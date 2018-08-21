@@ -1,21 +1,21 @@
-from django.contrib.auth import login as auth_login, get_user_model
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.validators import validate_email
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, HttpResponse
-from django.urls import reverse_lazy
-from django.views.decorators.csrf import csrf_protect
+from datetime import date
 from django.conf import settings
 from django.utils import translation
-from apps.user.forms import RegistroForm, Aute
+from django.urls import reverse_lazy
 from apps.user.models import User, Things
-from datetime import date
+from django.http import HttpResponseRedirect
+from apps.user.forms import RegistroForm, Aute
+from django.contrib.auth.views import LoginView
+from django.core.validators import validate_email
+from django.shortcuts import render, HttpResponse
+from django.views.decorators.csrf import csrf_protect
 from todolist.complement import MyPaginator, cleanhtml
-import json
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import login as auth_login, get_user_model
 import os
+import json
 import time
 
 def index(request):
