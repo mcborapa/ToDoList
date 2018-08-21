@@ -21,18 +21,22 @@ import time
 def index(request):
 	template = 'user/index.html'
 	page = request.GET.get('page')
-	limit = 21
+	limit = 9
 	if not page:
 		page = 1
-	use = request.user.id
-	pagn = Things.Paginator_Things(request, page=page, limit=limit, us=use)
-	paginator = MyPaginator(range(0, pagn["count"]), limit, query=pagn["things"])
-	sear = paginator.get_page(page)
-	contexto = {
-		'sear':sear,
-		'total': pagn["count"]
-	}
-	return render(request, template, contexto)
+	if request.user.is_authenticated:
+		use = request.user.id
+		pagn = Things.Paginator_Things(request, page=page, limit=limit, us=use)
+		paginator = MyPaginator(range(0, pagn["count"]), limit, query=pagn["things"])
+		sear = paginator.get_page(page)
+		contexto = {
+			'sear':sear,
+			'total': pagn["count"]
+		}
+		return render(request, template, contexto)
+	else:
+		return render(request, template)
+	
 
 def register(request):
 	form = RegistroForm()
@@ -170,10 +174,169 @@ def save_thing(request):
 			else:
 				_json = {'success': False, 'msj':'No puede estar vacio. Debe ingresar un contenido'}
 		except Exception as e:
-			print('ERror:', e)
 			_json = {'success': False, 'msj':'Ocurrio un error, vuelve a intentarlo.'}
 	else:
 		_json = {'success':False, 'msj':'Ocurrio un error, vuelve a intentarlo.'}
 	_json = json.dumps(_json)
 	return HttpResponse(_json, content_type='application/json')
+
+@login_required
+def delete_thing(request):
+	js = ''
+	msj = 'Ocurrio un error, vuelve a intentarlo.'
+	if request.method == 'POST':
+		try:
+			th = int(request.POST['thing'])
+			thing = Things.objects.get(pk=th)
+			if thing:
+				if thing.user == request.user:
+					thing.delete()
+					js = {'success':True}
+				else:
+					js = {'success': False, 'msj':msj}
+			else:
+				js = {'success': False, 'msj':msj}
+		except Exception as e:
+			js = {'success': False, 'msj':msj}
+	else:
+		js = {'success': False, 'msj':msj}
+	js = json.dumps(js)
+	return HttpResponse(js, content_type='aplication/json')
+
+@login_required
+def chang_stat(request):
+	js = ''
+	msj = 'Ocurrio un error, vuelve a intentarlo.'
+	if request.method == 'POST':
+		try:
+			th = int(request.POST['thing'])
+			stat = request.POST['stat']
+			hoy = date.today()
+			if stat == 'Pendiente' or stat == 'Terminada':
+				if stat == 'Pendiente':
+					stat = True
+					new_st = 'Terminada'
+				else:
+					stat = False
+					new_st = 'Pendiente'
+				thing = Things.objects.get(pk=th)
+				if thing:
+					if thing.user == request.user:
+						if thing.status_th != stat:
+							thing.status_th = stat
+							thing.dater_th = hoy
+							thing.save()
+							if thing.status_th:
+								anho, mes, dia = str(thing.dater_th).split('-')
+								new_fech = '{}/{}/{}'.format(dia, mes, anho)
+							else:
+								anho, mes, dia = str(thing.datec_th).split('-')
+								new_fech = '{}/{}/{}'.format(dia[0:2], mes, anho)
+							js = {'success':True, 'stat':thing.status_th, 'fecha':new_fech, 'new_st':new_st}
+						else:
+							js = {'success': False, 'msj':msj}
+					else:
+						js = {'success': False, 'msj':msj}
+				else:
+					js = {'success': False, 'msj':msj}
+			else:
+				js = {'success': False, 'msj':msj}
+		except Exception as e:
+			print('Error: ', e)
+			js = {'success': False, 'msj':msj}
+	else:
+		js = {'success': False, 'msj':msj}
+	js = json.dumps(js)
+	return HttpResponse(js, content_type='aplication/json')
+
+@login_required
+def edit_thign(request):
+	js = ''
+	msj = 'Ocurrio un error, vuelve a intentarlo.'
+	if request.method == 'POST':
+		try:
+			th = int(request.POST['thing'])
+			cont = cleanhtml(request.POST['cont'], [{'format': 'br', 'replace': ''}])
+			cont = cont.strip()
+			check = request.POST['statch']
+			print('CHCKER', check)
+			if check == 'true':
+				print('ACA 1')
+				check = True
+			elif check == 'false':
+				print('ACA ')
+				check = False
+			else:
+				print('ACA 3')
+				raise
+			print(request.POST)
+			mod = False
+			if cont != '':
+				thing = Things.objects.get(pk=th)
+				if thing:
+					if thing.user == request.user:
+						if thing.name_th != cont:
+							thing.name_th = cont
+							mod = True
+						if thing.status_th != check:
+							thing.status_th = check
+							mod = True
+						if mod:
+							thing.save()
+							cont = thing.name_th
+							stat = thing.status_th
+							if stat:
+								anho, mes, dia = str(thing.dater_th).split('-')
+								fecha = '{}/{}/{}'.format(dia, mes, anho)
+							else:
+								anho, mes, dia = str(thing.datec_th).split('-')
+								fecha = '{}/{}/{}'.format(dia[0:2], mes, anho)
+							js = {'success':True, 'cont':cont, 'fecha':fecha, 'stat':stat, 'th':th}
+						else:
+							js = {'success': False, 'msj':'No ha realizado ningun cambio'}
+					else:
+						js = {'success': False, 'msj':msj}
+				else:
+					js = {'success': False, 'msj':msj}
+			else:
+				js = {'success': False, 'msj':'No puede estar vacio. Debe ingresar un contenido'}
+		except Exception as e:
+			print('error:', e)
+			js = {'success': False, 'msj':msj}
+	else:
+		js = {'success': False, 'msj':msj}
+	js = json.dumps(js)
+	return HttpResponse(js, content_type='aplication/json')
+
+@login_required
+def edit_th(request):
+	js = ''
+	msj = 'Ocurrio un error, vuelve a intentarlo.'
+	if request.method == 'POST':
+		try:
+			th = int(request.POST['thing'])
+			thing = Things.objects.get(pk=th)
+			if thing:
+				if thing.user == request.user:
+					th = thing.pk
+					cont = thing.name_th
+					stat = thing.status_th
+					if stat:
+						anho, mes, dia = str(thing.dater_th).split('-')
+						fecha = '{}/{}/{}'.format(dia, mes, anho)
+					else:
+						anho, mes, dia = str(thing.datec_th).split('-')
+						fecha = '{}/{}/{}'.format(dia[0:2], mes, anho)
+					js = {'success':True, 'cont':cont, 'fecha':fecha, 'stat':stat, 'th':th}
+				else:
+					js = {'success': False, 'msj':msj}
+			else:
+				js = {'success': False, 'msj':msj}
+		except Exception as e:
+			print('Error :', e)
+			js = {'success': False, 'msj':msj}
+	else:
+		js = {'success': False, 'msj':msj}
+	js = json.dumps(js)
+	return HttpResponse(js, content_type='aplication/json')
 

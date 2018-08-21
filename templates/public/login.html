@@ -16,17 +16,25 @@
 {% block menu %} {% endblock %}
 
 {% block content %}
-  <form id="login-form" class="form-signin" method="post" role="form">
-    {% csrf_token %}
-    <br>
-    <h1 class="h3 mb-3 font-weight-normal">Iniciar Sesión</h1>
-    <label for="inputEmail" class="sr-only">Correo electronico</label>
-    {{ form.username }} 
-    
-    <label for="inputPassword" class="sr-only">{{ form.password.label }}</label>
-    {{ form.password }}
-    <div class="errorus">{{ form.non_field_errors }}</div>
-    <button class="btn btn-success" type="submit">Iniciar</button>
-    <a class="btn btn-primary" href="{% url 'user:register' %}" role="button">Regístrate</a>
-  </form>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="well well-sm">
+        <form id="login-form" class="form-signin" method="post" role="form">
+          {% csrf_token %}
+          <br>
+          <h1 class="h3 mb-3 font-weight-normal">Iniciar Sesión</h1>
+          <label for="inputEmail" class="sr-only">Correo electronico</label>
+          {{ form.username }}
+          <label for="inputPassword" class="sr-only">{{ form.password.label }}</label>
+          {{ form.password }}
+          <div class="errorus">{{ form.non_field_errors }}</div>
+          <button class="btn btn-success" type="submit">Iniciar</button>
+          <a class="btn btn-primary" href="{% url 'user:register' %}" role="button">Regístrate</a>
+          <a class="btn btn-primary" href="{% url 'user:index' %}" role="button">Home</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

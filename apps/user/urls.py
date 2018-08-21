@@ -1,7 +1,8 @@
 from django.urls import path
 from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.decorators import login_required
-from apps.user.views import register, index, Login, mythings, pendingth, madeth, save_thing
+from apps.user.views import (register, index, Login, mythings, pendingth, madeth, save_thing,
+    delete_thing, chang_stat, edit_thign, edit_th)
 
 urlpatterns = [
 	path('', index, name='index'),
@@ -12,4 +13,9 @@ urlpatterns = [
     path('pending/', pendingth, name='pendingth'),
     path('made/', madeth, name='madeth'),
     path('save_thing/', save_thing, name='save_thing'),
+    path('delete_thing/', delete_thing, name='delete_thing'),
+    path('chang_stat/', chang_stat, name='chang_stat'),
+    path('edit_thign/', edit_thign, name='edit_thign'),
+    path('edit_th/', edit_th, name='edit_th'),
+    
 ]

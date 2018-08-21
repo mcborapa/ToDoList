@@ -76,7 +76,7 @@
     {% block header %}
     {% block menu %}
         <nav class="navbar navbar-expand-lg navbar-light bg-dark navbar-dark">  
-            <a class="navbar-brand" href="#">OPTIC</a>
+            <a class="navbar-brand" href="{% url 'user:index' %}" title="Inicio">OPTIC</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -87,13 +87,7 @@
                             <span class="nav-link">Bienvenido, {{ request.user.first_name }} {{ request.user.last_name }}</span>
                         </li>
                     {% endif %}
-                    <li class="nav-item active">
-                        <a class="nav-link" href="{% url 'user:index' %}">Inicio<span class="sr-only">(current)</span></a>
-                    </li>
                     {% if request.user.is_authenticated %}
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Nueva Tarea</a>
-                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Mis Tareas
@@ -132,6 +126,57 @@
     {% endblock %}
     
     {% block modal %}
+        
     {% endblock %}
+    
+    {% block modalfixed %}
+        <div class="modal" id="view_thsp" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cond_th"><strong></strong></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="ststth"></div>
+                    <div class="modal-body">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="editthmo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-pk=''>
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="cond_th"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="ststth"></div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">To Do List:</label>
+                                <textarea class="form-control" id="cont_th"></textarea>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input id="inp_edst" class="form-check-input" type="checkbox" id="inlineCheckbox1">
+                                <label id="edit_status" class="form-check-label" for="inlineCheckbox1">Completa</label>
+                            </div>
+                            <div class="errorus text-center"></div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="btn btn-primary edit_thi">Guardar</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+        
 </body>
 </html>

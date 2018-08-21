@@ -37,7 +37,7 @@ class Things(models.Model):
 	name_th = models.CharField('Nombre', max_length=255)#Nombre de la tarea por hacer.
 	datec_th = models.DateTimeField(auto_now_add=True, editable=False) #Fecha de creacion.
 	status_th = models.BooleanField(default=False) #Estatus de la tarea por hacer.
-	dater_th = models.DateField(blank=True, null=True) #Fecha en qu se realizo la tarea.
+	dater_th = models.DateField(blank=False, null=True) #Fecha en qu se realizo la tarea.
 	user = models.ForeignKey(User, on_delete=models.CASCADE) #Usuario que la realiza.
 
 	def __str__(self):
