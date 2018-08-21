@@ -34,7 +34,7 @@ class User(AbstractUser):
 
 class Things(models.Model):
 	id_th = models.AutoField(primary_key=True)
-	name_th = models.CharField('Nombre', max_length=255)#Nombre de la tarea por hacer.
+	name_th = models.TextField('Nombre', blank=False, null=True)#Nombre de la tarea por hacer.
 	datec_th = models.DateTimeField(auto_now_add=True, editable=False) #Fecha de creacion.
 	status_th = models.BooleanField(default=False) #Estatus de la tarea por hacer.
 	dater_th = models.DateField(blank=False, null=True) #Fecha en qu se realizo la tarea.

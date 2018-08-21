@@ -1,27 +1,40 @@
 {% load i18n %}
 {% load staticfiles %}
+{% load public_extras %}
 
-<div>Total: {{ total }}</div><br>
+<div id="div_tot">
+    <strong id="tot_coun" >
+        Total: {{ total }}
+    </strong>
+</div><br>
 <div class="well well-sm">
     <ul class="list-group">
         {% for pag in sear.paginator.query %}
-            <li id="princ" class="list-group-item d-flex justify-content-between align-items-center princ" data-pk="{{pag.id_th}}" data-type="list">
+            <li id="princ" class="list-group-item d-flex justify-content-between align-items-center princ" name="things" data-pk="{{pag.id_th}}" data-type="list">
                 <div>
                     {% if pag.status_th %}
-                        <span class="badge badge-success badge-pill">Completada</span>
-                        <strong>{{ pag.dater_th|date:"d/m/Y" }}</strong>
+                        <span id="stth" class="badge badge-success badge-pill">Completada</span>
+                        <strong id="fecstat">{{ pag.dater_th|date:"d/m/Y" }}</strong>
                     {% else %}
-                        <span class="badge badge-danger badge-pill">Pendiente</span>
-                        <strong>{{ pag.datec_th|date:"d/m/Y" }}</strong>
+                        <span id="stth" class="badge badge-danger badge-pill">Pendiente</span>
+                        <strong id="fecstat">{{ pag.datec_th|date:"d/m/Y" }}</strong>
                     {% endif %}
-                    {{ pag.name_th }}
+                    <div id="conlisth">{{ pag.name_th|cort:120 }}</div>
                 </div>
                 <div>
                     <a class="clicon editar_th" title="Editar"><i class="far fa-edit"></i></a>
                     {% if pag.status_th %}
-                        <a class="point chang_stat" title="Terminada"><i class="far fa-check-square"></i></a>
+                        <span id="stpoi" class="badge badge-success badge-pill">
+                            <a class="point chang_stat" title="Terminada">
+                                <i class="far fa-check-square"></i>
+                            </a>
+                        </span>
                     {% else %}
-                        <a class="point chang_stat" title="Pendiente"><i class="far fa-check-square"></i></a>
+                        <span id="stpoi" class="badge badge-danger badge-pill">
+                            <a class="point chang_stat" title="Pendiente">
+                                <i class="far fa-check-square"></i>
+                            </a>
+                        </span>
                     {% endif %}
                     <a class="clicon del_th" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
                     <a class="clicon view_th" title="Ver"><i class="far fa-eye" ></i></a>

@@ -36,7 +36,6 @@ def index(request):
 		return render(request, template, contexto)
 	else:
 		return render(request, template)
-	
 
 def register(request):
 	form = RegistroForm()
@@ -191,7 +190,8 @@ def delete_thing(request):
 			if thing:
 				if thing.user == request.user:
 					thing.delete()
-					js = {'success':True}
+					count = Things.objects.filter(user=request.user).count()
+					js = {'success':True, 'count':count}
 				else:
 					js = {'success': False, 'msj':msj}
 			else:
@@ -226,13 +226,17 @@ def chang_stat(request):
 							thing.status_th = stat
 							thing.dater_th = hoy
 							thing.save()
-							if thing.status_th:
+
+							th = thing.pk
+							cont = thing.name_th
+							stat = thing.status_th
+							if stat:
 								anho, mes, dia = str(thing.dater_th).split('-')
-								new_fech = '{}/{}/{}'.format(dia, mes, anho)
+								fecha = '{}/{}/{}'.format(dia, mes, anho)
 							else:
 								anho, mes, dia = str(thing.datec_th).split('-')
-								new_fech = '{}/{}/{}'.format(dia[0:2], mes, anho)
-							js = {'success':True, 'stat':thing.status_th, 'fecha':new_fech, 'new_st':new_st}
+								fecha = '{}/{}/{}'.format(dia[0:2], mes, anho)
+							js = {'success':True, 'cont':cont, 'fecha':fecha, 'stat':stat, 'th':th}
 						else:
 							js = {'success': False, 'msj':msj}
 					else:
@@ -242,7 +246,6 @@ def chang_stat(request):
 			else:
 				js = {'success': False, 'msj':msj}
 		except Exception as e:
-			print('Error: ', e)
 			js = {'success': False, 'msj':msj}
 	else:
 		js = {'success': False, 'msj':msj}
@@ -259,49 +262,48 @@ def edit_thign(request):
 			cont = cleanhtml(request.POST['cont'], [{'format': 'br', 'replace': ''}])
 			cont = cont.strip()
 			check = request.POST['statch']
-			print('CHCKER', check)
-			if check == 'true':
-				print('ACA 1')
-				check = True
-			elif check == 'false':
-				print('ACA ')
-				check = False
-			else:
-				print('ACA 3')
-				raise
-			print(request.POST)
-			mod = False
-			if cont != '':
-				thing = Things.objects.get(pk=th)
-				if thing:
-					if thing.user == request.user:
-						if thing.name_th != cont:
-							thing.name_th = cont
-							mod = True
-						if thing.status_th != check:
-							thing.status_th = check
-							mod = True
-						if mod:
-							thing.save()
-							cont = thing.name_th
-							stat = thing.status_th
-							if stat:
-								anho, mes, dia = str(thing.dater_th).split('-')
-								fecha = '{}/{}/{}'.format(dia, mes, anho)
+			if check == 'true' or check == 'false':
+				if check == 'true':
+					check = True
+				elif check == 'false':
+					check = False
+				mod = False
+				if cont != '':
+					thing = Things.objects.get(pk=th)
+					if thing:
+						if thing.user == request.user:
+							if thing.name_th != cont:
+								thing.name_th = cont
+								mod = True
+							if thing.status_th != check:
+								thing.status_th = check
+								if check:
+									hoy = date.today()
+									thing.dater_th = hoy
+								mod = True
+							
+							if mod:
+								thing.save()
+								cont = thing.name_th
+								stat = thing.status_th
+								if stat:
+									anho, mes, dia = str(thing.dater_th).split('-')
+									fecha = '{}/{}/{}'.format(dia, mes, anho)
+								else:
+									anho, mes, dia = str(thing.datec_th).split('-')
+									fecha = '{}/{}/{}'.format(dia[0:2], mes, anho)
+								js = {'success':True, 'cont':cont, 'fecha':fecha, 'stat':stat, 'th':th}
 							else:
-								anho, mes, dia = str(thing.datec_th).split('-')
-								fecha = '{}/{}/{}'.format(dia[0:2], mes, anho)
-							js = {'success':True, 'cont':cont, 'fecha':fecha, 'stat':stat, 'th':th}
+								js = {'success': False, 'msj':'No ha realizado ningun cambio'}
 						else:
-							js = {'success': False, 'msj':'No ha realizado ningun cambio'}
+							js = {'success': False, 'msj':msj}
 					else:
 						js = {'success': False, 'msj':msj}
 				else:
-					js = {'success': False, 'msj':msj}
+					js = {'success': False, 'msj':'No puede estar vacio. Debe ingresar un contenido'}
 			else:
-				js = {'success': False, 'msj':'No puede estar vacio. Debe ingresar un contenido'}
+				js = {'success': False, 'msj':msj}
 		except Exception as e:
-			print('error:', e)
 			js = {'success': False, 'msj':msj}
 	else:
 		js = {'success': False, 'msj':msj}
@@ -333,7 +335,37 @@ def edit_th(request):
 			else:
 				js = {'success': False, 'msj':msj}
 		except Exception as e:
-			print('Error :', e)
+			js = {'success': False, 'msj':msj}
+	else:
+		js = {'success': False, 'msj':msj}
+	js = json.dumps(js)
+	return HttpResponse(js, content_type='aplication/json')
+
+@login_required
+def view_th(request):
+	js = ''
+	msj = 'Ocurrio un error, vuelve a intentarlo.'
+	if request.method == 'POST':
+		try:
+			th = int(request.POST['thing'])
+			thing = Things.objects.get(pk=th)
+			if thing:
+				if thing.user == request.user:
+					th = thing.pk
+					cont = thing.name_th
+					stat = thing.status_th
+					if stat:
+						anho, mes, dia = str(thing.dater_th).split('-')
+						fecha = '{}/{}/{}'.format(dia, mes, anho)
+					else:
+						anho, mes, dia = str(thing.datec_th).split('-')
+						fecha = '{}/{}/{}'.format(dia[0:2], mes, anho)
+					js = {'success':True, 'cont':cont, 'fecha':fecha, 'stat':stat, 'th':th}
+				else:
+					js = {'success': False, 'msj':msj}
+			else:
+				js = {'success': False, 'msj':msj}
+		except Exception as e:
 			js = {'success': False, 'msj':msj}
 	else:
 		js = {'success': False, 'msj':msj}

@@ -43,9 +43,10 @@
                             <h1>To Do List</h1>
                         </div><br>
                         {% if total == 0 %}
-                            <div class="alert alert-danger text-center" role="alert">
+                            <div name="notth" class="alert alert-danger text-center" role="alert">
                                 No Tiene To Do List.
                             </div>
+                            <div id="misthi" class="row"></div>
                         {% else %}
                             <div id="misthi" class="row">
                                 {% for pag in sear.paginator.query %}

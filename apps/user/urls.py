@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth.views import logout_then_login
 from django.contrib.auth.decorators import login_required
 from apps.user.views import (register, index, Login, mythings, pendingth, madeth, save_thing,
-    delete_thing, chang_stat, edit_thign, edit_th)
+    delete_thing, chang_stat, edit_thign, edit_th, view_th)
 
 urlpatterns = [
 	path('', index, name='index'),
@@ -17,5 +17,6 @@ urlpatterns = [
     path('chang_stat/', chang_stat, name='chang_stat'),
     path('edit_thign/', edit_thign, name='edit_thign'),
     path('edit_th/', edit_th, name='edit_th'),
+    path('view_th/', view_th, name='view_th'),
     
 ]
