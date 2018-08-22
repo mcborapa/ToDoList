@@ -1,0 +1,28 @@
+{% extends 'main/main.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %} Tareas Pendientes OPTIC-To Do List {% endblock %}
+
+{% block cssunsettled %}
+    <link href="{% static 'public/css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-center">
+                    <h1>Mis Tareas Pendientes</h1>
+                </div><br>
+                {% if total == 0 %}
+                    <div class="alert alert-danger text-center" role="alert">
+                        No tiene tareas Pendientes.
+                    </div>
+                {% else %}
+                    {% include "./listth.html" %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

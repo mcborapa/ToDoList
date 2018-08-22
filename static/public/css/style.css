@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+.errorus {
+    font-size: 13px;
+    font-weight: 700;
+    color: #e72323;
+}
+
+.clicon {
+    color: #939696 !important;
+    cursor: pointer;
+}
+
+.point {
+    cursor: pointer;
+}
+

@@ -1,0 +1,36 @@
+{% load i18n %}
+{% load public_extras %}
+
+<div id="princ" class="col-sm-4 princ" data-pk='{{pag.id_th}}' data-cont='{{ pag.name_th }}' name='things' data-type="index">
+    <div id="card_pr" class="card {% if pag.status_th %}border-success{% else %}border-danger{% endif %} mb-3" style="max-width: 18rem;">
+        <div id="fech_th" class="card-header">
+            <strong>
+                {% if pag.status_th %}
+                    Terminada el: {{ pag.dater_th|date:"d/m/Y" }}
+                {% else %}
+                    Creada el: {{ pag.datec_th|date:"d/m/Y" }}
+                {% endif %}
+            </strong>
+        </div>
+        <div id="card_bd" class="card-body {% if pag.status_th %}text-success{% else %}text-danger{% endif %}">
+            <p class="card-text">
+                {{ pag.name_th|cort:25 }}
+            </p>
+            <div class="text-center">
+                <div>
+                    <a class="clicon editar_th" title="Editar"><i class="far fa-edit"></i></a>
+                    {% if pag.status_th %}
+                        <a class="point chang_stat" title="Terminada"><i class="far fa-check-square"></i></a>
+                    {% else %}
+                        <a class="point chang_stat" title="Pendiente"><i class="far fa-check-square"></i></a>
+                    {% endif %}
+                    <a class="clicon del_th" title="Eliminar"><i class="fas fa-trash-alt"></i></a>
+                    <a class="clicon view_th" title="Ver"><i class="far fa-eye" ></i></a>
+                    <div id="ver_thg" data-toggle="modal" data-target="#view_thsp"></div>
+                    <div id="ed_thg" data-toggle="modal" data-target="#editthmo" data-whatever="@mdo"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="errorus"></div>
+</div>

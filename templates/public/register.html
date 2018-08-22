@@ -1,0 +1,72 @@
+{% extends 'main/main.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %} Registro OPTIC-TODO List {% endblock %}
+
+{% block cssunsettled %}
+    <link href="{% static 'public/css/style.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="well well-sm">
+                    <form action="" id="registro" method="post">
+                        {% csrf_token %}
+                        <fieldset>
+                            <legend class="text-center header">Regístrate</legend>
+                            <br>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>{{ form.first_name.label }}</label>
+                                    {{ form.first_name }}
+                                    <div class="errorus">{{ form.first_name.errors }}</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>{{ form.last_name.label }}</label>
+                                    {{ form.last_name }}
+                                    <div class="errorus">{{ form.last_name.errors }}</div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label>{{ form.email.label }}</label>
+                                    {{ form.email }}
+                                    <div class="errorus">{{ form.email.errors }}</div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label>{{ form.birthday.label }}</label>
+                                    {{ form.birthday }}
+                                    <div class="errorus">{{ form.birthday.errors }}</div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label>{{ form.phone.label }}</label>
+                                    {{ form.phone }}
+                                    <div class="errorus">{{ form.phone.errors }}</div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label>{{ form.password1.label }}</label>
+                                    {{ form.password1 }}
+                                    <div class="errorus">{{ form.password1.errors }}</div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>{{ form.password2.label }}</label>
+                                    {{ form.password2 }}
+                                    <div class="errorus">{{ form.password2.errors }}</div>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button class="btn btn-success" type="submit">Registrar</button>
+                                <a class="btn btn-primary" href="{% url 'user:login' %}" role="button">Iniciar Sesión</a>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
